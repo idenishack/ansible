@@ -1,0 +1,44 @@
+ScriptAlias /nagios/cgi-bin "/usr/lib64/nagios/cgi-bin/"
+<Directory "/usr/lib64/nagios/cgi-bin/">
+   Options ExecCGI
+   AllowOverride None
+   <IfVersion >= 2.3>
+      <RequireAll>
+         Require ip 127.0.0.0/8 10.0.2.0/24 172.16.0.0/24 10.2.7.0/24 192.168.123.0/24 192.168.1.0/24 192.168.6.0/24 192.168.12.0/24
+         AuthName "Nagios Access"
+         AuthType Basic
+         AuthUserFile /etc/nagios/passwd
+         Require valid-user
+      </RequireAll>
+   </IfVersion>
+   <IfVersion < 2.3>
+      Order allow,deny
+      Allow from all
+      AuthName "Nagios Access"
+      AuthType Basic
+      AuthUserFile /etc/nagios/passwd
+      Require valid-user
+   </IfVersion>
+</Directory>
+Alias /nagios "/usr/share/nagios/html"
+<Directory "/usr/share/nagios/html">
+   Options None
+   AllowOverride None
+   <IfVersion >= 2.3>
+      <RequireAll>
+         Require all granted
+         AuthName "Nagios Access"
+         AuthType Basic
+         AuthUserFile /etc/nagios/passwd
+         Require valid-user
+      </RequireAll>
+   </IfVersion>
+   <IfVersion < 2.3>
+      Order allow,deny
+      Allow from all
+      AuthName "Nagios Access"
+      AuthType Basic
+      AuthUserFile /etc/nagios/passwd
+      Require valid-user
+   </IfVersion>
+</Directory>

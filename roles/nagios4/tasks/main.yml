@@ -1,0 +1,103 @@
+---
+# tasks file for nagios4
+- name: Set timezone 
+  timezone:
+    name: "{{ timezone }}"
+  become: yes
+  tags:
+    - nagios_timezone     
+
+- hostname:
+    name: "{{ hostname }}"
+  become: yes
+  tags:
+    - nagios_hostname       
+
+- name: Install required packages for nagios
+  dnf:
+    name: "{{ install_packages }}"
+    state: present
+  become: yes
+  tags:
+    - nagios_packages
+
+- name: Update nagios web configuration 
+  template:
+    src: "{{ nagios_j2_templates }}"
+    dest: "{{ nagios_conf }}"
+  become: yes
+  tags:
+    - nagios_web_conf    
+   
+- name: Create nagiosadmin user for httpd access
+  shell: htpasswd -cb /etc/nagios/passwd nagiosadmin {{ nagiosadmin_password }}
+  become: yes
+  tags:
+    - nagiosadmin    
+
+- name: Nagios is running and enabled
+  systemd:
+    name: "{{ nagios_name_services }}"
+    state: started
+    enabled: yes  
+  become: yes
+  tags:
+    - nagios_services   
+
+- name: Nagios allow Web accsess
+  firewalld:
+    service: "{{ nagios_fw_services }}"
+    permanent: yes
+    state: enabled
+  become: yes
+  tags:
+    - nagios_fw_services
+
+- name: FirewallD Restarted  
+  systemd:
+    name: "{{ fw_services }}"
+    state: restarted
+    enabled: yes
+  become: yes
+  tags:
+    - fw_services
+
+- name: Update nagios commands configuration 
+  template:
+    src: "{{ nagios_commands_j2 }}"
+    dest: "{{ nagios_commands }}"
+  become: yes
+  tags:
+    - nagios_commands
+
+- name: Update nagios localhost configuration 
+  template:
+    src: "{{ nagios_localhost_j2 }}"
+    dest: "{{ nagios_localhost }}"
+  become: yes
+  tags:
+    - nagios_localhost
+
+- name: restart service nagios 
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: nagios 
+  become: yes
+  tags:
+    - nagios_restarted
+      
+- name: restart service httpd
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: httpd
+  become: yes
+  tags:
+    - httpd_restarted
+      
+- name: Verify all configuration data 
+  shell: nagios -v "{{ nagios_check }}"
+  become: yes
+  tags:
+    - nagios_check

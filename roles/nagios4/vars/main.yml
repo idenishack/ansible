@@ -1,0 +1,48 @@
+---
+# vars file for nagios4
+install_packages:
+  - nagios 
+  - nagios-plugins-bonding
+  - nagios-plugins-check-updates
+  - nagios-plugins-dhcp
+  - nagios-plugins-dig
+  - nagios-plugins-disk
+  - nagios-plugins-dns
+  - nagios-plugins-file_age
+  - nagios-plugins-fping
+  - nagios-plugins-http
+  - nagios-plugins-icmp
+  - nagios-plugins-load
+  - nagios-plugins-log
+  - nagios-plugins-mrtg
+  - nagios-plugins-nagios
+  - nagios-plugins-nrpe
+  - nagios-plugins-ntp
+  - nagios-plugins-ping
+  - nagios-plugins-procs
+  - nagios-plugins-ssh
+  - nagios-plugins-swap
+  - nagios-plugins-tcp  
+  - nagios-plugins-time
+  - nagios-plugins-uptime
+  - nagios-plugins-users
+
+nagios_j2_templates: /root/roles/nagios4/templates/nagios.j2
+nagios_conf: /etc/httpd/conf.d/nagios.conf
+
+nagios_commands_j2: /root/roles/nagios4/templates/commands.j2
+nagios_commands: /etc/nagios/objects/commands.cfg
+
+nagios_localhost_j2: /root/roles/nagios4/templates/localhost.j2
+nagios_localhost: /etc/nagios/objects/localhost.cfg 
+
+nagios_check: /etc/nagios/nagios.cfg
+
+nagiosadmin_password: nagiosadmin
+nagios_name_services: nagios
+nagios_web_services: httpd
+nagios_fw_services: http
+fw_services: firewalld
+
+timezone: Europe/Zaporozhye
+hostname: NAGIOS4
