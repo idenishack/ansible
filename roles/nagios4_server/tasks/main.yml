@@ -1,0 +1,148 @@
+---
+# tasks file for nagios4_server
+- name: Copy hosts file
+  copy:
+    src: /root/roles/nagios4_server/files/hosts
+    dest: /etc/hosts
+    owner: root
+    group: root        
+    mode: 0644
+
+- name: Set timezone 
+  timezone:
+    name: "{{ timezone }}"
+  become: yes
+  tags:
+    - nagios_timezone     
+
+- hostname:
+    name: "{{ hostname }}"
+  become: yes
+  tags:
+    - nagios_hostname       
+
+- name: Install required packages for nagios
+  dnf:
+    name: "{{ install_packages }}"
+    state: present
+  become: yes
+  tags:
+    - nagios_packages
+
+- name: Update nagios web configuration 
+  template:
+    src: "{{ nagios_conf_j2 }}"
+    dest: "{{ nagios_conf }}"
+  become: yes
+  tags:
+    - nagios_web_conf        
+
+- name: Create nagiosadmin user for httpd access
+  shell: htpasswd -cb /etc/nagios/passwd nagiosadmin {{ nagiosadmin_password }}
+  become: yes
+  tags:
+    - nagiosadmin       
+
+- name: Nagios is running and enabled
+  systemd:
+    name: "{{ nagios_name_services }}"
+    state: started
+    enabled: yes  
+  become: yes
+  tags:
+    - nagios_services   
+
+- name: Nagios allow Web accsess
+  firewalld:
+    service: "{{ nagios_fw_services }}"
+    permanent: yes
+    state: enabled
+  become: yes
+  tags:
+    - nagios_fw_services   
+  notify:
+    - restart firewalld
+
+- name: Update nagios commands configuration 
+  template:
+    src: "{{ nagios_commands_j2 }}"
+    dest: "{{ nagios_commands }}"
+  become: yes
+  tags:
+    - nagios_commands
+
+- name: Update nagios localhost configuration 
+  template:
+    src: "{{ nagios_localhost_j2 }}"
+    dest: "{{ nagios_localhost }}"
+  become: yes
+  tags:
+    - nagios_localhost
+
+- name: Create a directory
+  file:
+    path: /var/spool/nagios/checkresults
+    state: directory
+
+- name: Create a directory for nagios servers
+  file:
+    path: /etc/nagios/servers
+    state: directory
+
+- name: Update nagios nagios.cfg configuration 
+  template:
+    src: "{{ nagios_cfg_server_j2 }}"
+    dest: "{{ nagios_cfg_server }}"
+  become: yes
+  tags:
+    - update nagios cfg
+
+- name: Copy ansible file for monitoring
+  template:
+    src: /root/roles/nagios4_server/templates/ansible.cfg.j2
+    dest: /etc/nagios/servers/ansible.cfg
+  become: yes
+  tags:
+    - ansible_file
+
+- name: Copy nginx-unit.cfg file for monitoring
+  template:
+    src: /root/roles/nagios4_server/templates/nginx-unit.cfg.j2
+    dest: /etc/nagios/servers/nginx-unit.cfg
+  become: yes
+  tags:
+    - nginx_unit
+
+- name: Copy terraform file for monitoring
+  template:
+    src: /root/roles/nagios4_server/templates/terraform.cfg.j2
+    dest: /etc/nagios/servers/terraform.cfg
+  become: yes
+  tags:
+    - terraform
+
+- name: Copy gitserver file for monitoring
+  template:
+    src: /root/roles/nagios4_server/templates/gitserver.cfg.j2
+    dest: /etc/nagios/servers/gitserver.cfg
+  become: yes
+  tags:
+    - terraform
+
+- name: Copy hostgroupinfra file for monitoring
+  template:
+    src: /root/roles/nagios4_server/templates/hostgroupinfra.cfg.j2
+    dest: /etc/nagios/servers/hostgroupinfra.cfg
+  become: yes
+  tags:
+    - hostgroupinfra
+
+- name: Verify all configuration data 
+  shell: nagios -v "{{ nagios_check }}"
+  become: yes
+  tags:
+    - nagios_check
+  notify:
+    - restart nagios
+    - restart httpd 
+

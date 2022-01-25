@@ -1,0 +1,33 @@
+---
+# tasks file for ntp_client
+- name: Copy hosts file
+  copy:
+    src: /root/roles/ntp_client/files/hosts
+    dest: /etc/hosts
+    owner: root
+    group: root        
+    mode: 0644
+
+- name: Set timezone 
+  timezone:
+    name: Europe/Zaporozhye
+  become: yes
+  tags:
+    - ntpserver_timezone     
+
+- name: Configure Chrony as a Client
+  dnf:
+    name:
+      - chrony
+      - ntpstat
+    state: latest
+
+- name: Configure Chrony as a Client
+  template:
+    src: /root/roles/ntp_client/templates/chrony_client.j2
+    dest: /etc/chrony.conf
+- name: start and autostart chronyd    
+  systemd:
+    name: chronyd
+    state: restarted
+    enabled: yes

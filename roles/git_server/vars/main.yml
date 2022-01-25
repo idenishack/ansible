@@ -1,0 +1,5 @@
+---
+# vars file for git_server
+install_git_server_packages:
+  - gitolite3
+  - git

@@ -1,0 +1,11 @@
+---
+- name: Config NAGIOS4 with plugins
+  hosts: GitServer:TERRAFORM:ansible_master:NTPSERVER:nginx-unit
+  user: idenisick
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: Configure nagios4 nrpe using role
+      import_role:
+        name: nagios4_nrpe

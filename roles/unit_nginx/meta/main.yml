@@ -1,0 +1,17 @@
+galaxy_info:
+  author: Denis Kharchenko
+  description: Deploy and configure Nagios with plugins
+  company: idenis.inc
+
+  license: MIT
+
+  min_ansible_version: 2.9.27
+
+  platforms:
+  - name: Fedora Linux 
+    versions:
+    - 35
+
+  galaxy_tags: []
+
+dependencies: []

@@ -1,0 +1,60 @@
+---
+# tasks file for nagios4_nrpe
+- name: Copy hosts file
+  copy:
+    src: /root/roles/nagios4_server/files/hosts
+    dest: /etc/hosts
+    owner: root
+    group: root        
+    mode: 0644
+
+- name: Set timezone 
+  timezone:
+    name: "{{ timezone }}"
+  become: yes
+  tags:
+    - nagios_timezone     
+
+- hostname:
+    name: "{{ hostname }}"
+  become: yes
+  tags:
+    - nagios_hostname       
+
+- name: Install required packages for nagios nrpe
+  dnf:
+    name: "{{ install_nrpe_packages }}"
+    state: present
+  become: yes
+  tags:
+    - nagios_packages
+
+- name: Update nagios nrpe configuration 
+  template:
+    src: "{{ nagios_nrpe_j2 }}"
+    dest: "{{ nagios_nrpe }}"
+  become: yes
+  tags:
+    - nagios_nrpe          
+
+- name: Nagios NRPE is running and enabled
+  systemd:
+    name: "{{ nagios_nrpe_services }}"
+    state: started
+    enabled: yes  
+  become: yes
+  tags:
+    - nagios_nrpe_services   
+  notify:
+    - restart nrpe
+
+- name: allow nrpe port
+  firewalld:
+    port: "{{ nrpe_port }}"
+    permanent: yes
+    state: enabled
+  become: yes
+  tags:
+    - nrpe_port   
+  notify:
+    - restart firewalld

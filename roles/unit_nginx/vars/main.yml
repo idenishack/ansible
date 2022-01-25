@@ -1,0 +1,15 @@
+---
+# vars file for unit_nginx
+install_nginx_unit_packages:
+  - unit-devel 
+  - unit-go
+  - unit-jsc11
+  - unit-jsc8
+  - unit-perl 
+  - unit-php 
+  - unit-perl 
+  - unit-python310
+  - unit-ruby
+  - wget
+  - curl
+  - tcpdump

@@ -1,0 +1,19 @@
+---
+- name: install terraform
+  hosts: IaaC
+  user: idenisick
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: install terraform using role
+      import_role:
+        name: terraform
+
+    - name: Configure nagios4 nrpe using role
+      import_role:
+        name: nagios4_nrpe
+
+    - name: Configure ntp_client using role
+      import_role:
+        name: ntp_client

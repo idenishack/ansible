@@ -1,0 +1,28 @@
+---
+# tasks file for terraform
+- name: Copy hosts file
+  copy:
+    src: /root/roles/terraform/files/hosts
+    dest: /etc/hosts
+    owner: root
+    group: root        
+    mode: 0644
+
+- name: Set timezone 
+  timezone:
+    name: Europe/Zaporozhye
+  become: yes
+  tags:
+    - ntpserver_timezone   
+
+- name: install Hashicorp Stable Repo
+  get_url:
+    url: https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+    dest: /etc/yum.repos.d/hashicorp.repo
+
+- name: install terraform 
+  dnf:
+    name:
+      - terraform
+      - jq
+    state: latest

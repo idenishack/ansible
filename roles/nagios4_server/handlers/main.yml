@@ -1,0 +1,16 @@
+---
+# handlers file for nagios4_server
+- name: restart nagios
+  systemd: 
+   name: nagios
+   state: restarted 
+   enabled: yes
+
+- name: restart httpd 
+  systemd:
+   name: httpd 
+   state: restarted 
+   enabled: yes
+
+- name: restart firewalld
+  systemd: name=firewalld state=restarted enabled=yes

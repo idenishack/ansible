@@ -1,0 +1,39 @@
+---
+# vars file for nagios4_nrpe
+timezone: Europe/Zaporozhye
+hostname: ANSIBLEMASTER
+
+install_nrpe_packages:
+  - nrpe 
+  - nagios-plugins-all
+  - nagios-plugins-bonding
+  - nagios-plugins-check-updates
+  - nagios-plugins-dhcp
+  - nagios-plugins-dig
+  - nagios-plugins-disk
+  - nagios-plugins-dns
+  - nagios-plugins-file_age
+  - nagios-plugins-fping
+  - nagios-plugins-http
+  - nagios-plugins-icmp
+  - nagios-plugins-load
+  - nagios-plugins-log
+  - nagios-plugins-mrtg
+  - nagios-plugins-nagios
+  - nagios-plugins-nrpe
+  - nagios-plugins-ntp
+  - nagios-plugins-ping
+  - nagios-plugins-procs
+  - nagios-plugins-ssh
+  - nagios-plugins-swap
+  - nagios-plugins-tcp  
+  - nagios-plugins-time
+  - nagios-plugins-uptime
+  - nagios-plugins-users
+
+nagios_nrpe_j2: /root/roles/nagios4_nrpe/templates/nrpe.j2
+nagios_nrpe: /etc/nagios/nrpe.cfg
+
+nagios_nrpe_services: nrpe
+
+nrpe_port: 5666/tcp

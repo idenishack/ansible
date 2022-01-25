@@ -1,0 +1,15 @@
+---
+# tasks file for git_server
+- hostname:
+    name: GIT-SERVER
+  become: yes
+  tags:
+    - git_server_hostname  
+
+- name: Install required packages for git_server
+  dnf:
+    name: "{{ install_git_server_packages }}"
+    state: present
+  become: yes
+  tags:
+    - git_server

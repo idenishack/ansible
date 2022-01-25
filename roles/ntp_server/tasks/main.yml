@@ -1,0 +1,55 @@
+---
+# tasks file for ntp_server
+- name: Copy hosts file
+  copy:
+    src: /root/roles/ntp_server/files/hosts
+    dest: /etc/hosts
+    owner: root
+    group: root        
+    mode: 0644
+
+- name: Set timezone 
+  timezone:
+    name: Europe/Zaporozhye
+  become: yes
+  tags:
+    - ntpserver_timezone     
+
+- hostname:
+    name: CHRONYntpserver
+  become: yes
+  tags:
+    - ntpserver_hostname       
+
+- name: Install Chrony Server Mode
+  dnf:
+    name:
+      - chrony
+      - ntpstat
+    state: latest
+
+- name: Configure Chrony
+  template:
+    src: /root/roles/ntp_server/templates/chrony_server.j2
+    dest: /etc/chrony.conf
+- name: start and autostart chronyd    
+  systemd:
+    name: chronyd
+    state: restarted
+    enabled: yes
+
+- name: Copy a new Firewall Rule "chrony.xml" file into place
+  copy:
+    src: /root/roles/ntp_server/templates/chrony.xml
+    dest: /usr/lib/firewalld/services/
+    owner: root
+    group: root
+    mode: '0644'    
+  notify: Reload FirewallD    
+
+- name: Start and Autostart Firewall Chrony Rule
+  firewalld:
+    service: chrony
+    permanent: yes
+    state: enabled
+  notify: Reload FirewallD     

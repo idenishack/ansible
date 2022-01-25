@@ -1,0 +1,7 @@
+---
+# handlers file for nagios4_nrpe
+- name: restart firewalld
+  systemd: name=firewalld state=restarted enabled=yes
+
+- name: restart nrpe
+  systemd: name=nrpe state=restarted enabled=yes

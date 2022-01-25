@@ -1,0 +1,28 @@
+---
+# tasks file for unit_nginx
+- hostname:
+    name: NGINX-Unit
+  become: yes
+  tags:
+    - nginx_unit_hostname  
+
+- name: Copy nginx unit file
+  copy:
+    src: /root/roles/unit_nginx/files/unit.repo
+    dest: /etc/yum.repos.d/
+    owner: root
+    group: root        
+    mode: 0644
+- name: Install required packages for nginx_unit
+  dnf:
+    name: "{{ install_nginx_unit_packages }}"
+    state: present
+  become: yes
+  tags:
+    - nginx_unit_packages
+
+- name: start and autostart nginx_unit    
+  systemd:
+    name: unit  
+    state: restarted
+    enabled: yes    

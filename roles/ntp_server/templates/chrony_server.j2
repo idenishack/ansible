@@ -1,0 +1,18 @@
+server 0.ua.pool.ntp.org iburst
+server 1.ua.pool.ntp.org iburst
+server 2.ua.pool.ntp.org iburst
+server 3.ua.pool.ntp.org iburst
+allow 10.0.2.0/24
+allow 172.16.0.0/24
+allow 10.2.7.0/24
+allow 192.168.123.0/24
+allow 192.168.6.0/24
+allow 192.168.12.0/24
+sourcedir /run/chrony-dhcp
+driftfile /var/lib/chrony/drift
+makestep 1.0 3
+rtcsync
+keyfile /etc/chrony.keys
+ntsdumpdir /var/lib/chrony
+leapsectz right/UTC
+logdir /var/log/chrony

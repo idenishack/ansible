@@ -1,0 +1,29 @@
+define hostgroup{
+        hostgroup_name          iaac
+        alias                   IaaC
+        members                 ansible.master.mgmt, terraform.mgmt, git.server
+}
+
+define hostgroup{
+        hostgroup_name          ntp-server 
+        alias                   NTP Servers
+        members                 ntp.chrony.server
+}
+
+define hostgroup{
+        hostgroup_name          web-server
+        alias                   Web Servers
+        members                 nginx.unit
+}
+
+define hostgroup{
+        hostgroup_name          git-server
+        alias                   Git Servers
+        members                 git.server
+}
+
+define hostgroup{
+        hostgroup_name          hashicorp
+        alias                   HashiCorp 
+        members                 terraform.mgmt
+}

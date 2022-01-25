@@ -1,0 +1,11 @@
+---
+- name: Config NAGIOS4 with plugins
+  hosts: NAGIOS
+  user: idenisick
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: Configure nagios4 using role
+      import_role:
+        name: nagios4_server

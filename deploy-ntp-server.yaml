@@ -1,0 +1,19 @@
+---
+- name: Config NAGIOS4 with plugins
+  hosts: NTPSERVER
+  user: idenisick
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: Configure ntp_server using role
+      import_role:
+        name: ntp_server
+
+    - name: Configure nagios4 nrpe using role
+      import_role:
+        name: nagios4_nrpe
+
+    - name: Configure ntp_client using role
+      import_role:
+        name: ntp_client          

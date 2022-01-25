@@ -1,0 +1,19 @@
+---
+- name: Config GitServer
+  hosts: GitServer
+  user: idenisick
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: Configure GitServer using role
+      import_role:
+        name: git_server
+          
+    - name: Configure nagios4 nrpe using role
+      import_role:
+        name: nagios4_nrpe         
+
+    - name: Configure ntp_client using role
+      import_role:
+        name: ntp_client

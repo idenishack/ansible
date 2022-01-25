@@ -1,0 +1,4 @@
+---
+# handlers file for ntp_server
+- name: Reload FirewallD
+  systemd: name=firewalld state=reloaded

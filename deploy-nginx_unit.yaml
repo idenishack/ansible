@@ -1,0 +1,19 @@
+---
+- name: install nginx-unit
+  hosts: nginx-unit
+  user: idenisick
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: install nginx-unit using role
+      import_role:
+        name: unit_nginx
+
+    - name: Configure nagios4 nrpe using role
+      import_role:
+        name: nagios4_nrpe
+
+    - name: Configure ntp_client using role
+      import_role:
+        name: ntp_client          
