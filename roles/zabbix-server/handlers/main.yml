@@ -1,0 +1,27 @@
+---
+# handlers file for zabbix-server
+- name: restart nginx
+  ansible.builtin.systemd:
+    name: nginx
+    state: started
+    enabled: yes
+- name: restart zabbix_server
+  ansible.builtin.systemd:
+    name: zabbix-server
+    state: restarted
+    enabled: yes    
+- name: restart zabbix_agent2
+  ansible.builtin.systemd:
+    name:  zabbix-agent2
+    state: restarted
+    enabled: yes    
+- name: restart php_fpm
+  ansible.builtin.systemd:
+    name: php-fpm
+    state: restarted
+    enabled: yes     
+- name: restart firewalld
+  ansible.builtin.systemd:
+    name: firewalld
+    state: restarted
+    enabled: yes     

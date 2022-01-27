@@ -1,0 +1,27 @@
+galaxy_info:
+  author: Denis Harchenko
+  description: zabbix agent 5.4 
+  company: idenis.inc 
+
+  license: MIT
+
+  min_ansible_version: 2.9
+
+  platforms:
+   - name: Fedora Linux
+     versions:
+     - 35
+
+  platforms:
+   - name: Ubuntu Server
+     versions:
+     - 21.04 (Hirsute Hippo)
+
+  platforms:
+   - name: openSUSE 
+     versions:
+     - Leap 15.3
+
+  galaxy_tags: []
+
+dependencies: []

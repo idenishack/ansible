@@ -1,0 +1,8 @@
+---
+# tasks file for zabbix-agent
+- include: suse.yaml
+  when: ansible_pkg_mgr == 'zypper'
+- include: ubuntu.yaml
+  when: ansible_pkg_mgr == 'apt'
+- include: fedora.yaml
+  when: ansible_pkg_mgr == 'dnf'

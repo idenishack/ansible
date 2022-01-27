@@ -1,0 +1,11 @@
+---
+- name: zabbix agent
+  hosts: ansible_master:ZABBIXPROXY:SUSE
+  user: idenisick
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: Configure zabbix agent using role
+      import_role:
+        name: zabbix-agent

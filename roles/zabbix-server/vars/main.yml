@@ -1,0 +1,16 @@
+---
+# vars file for zabbix-server
+zabbix_packages:
+  - zabbix-server-mysql
+  - zabbix-web-mysql
+  - zabbix-nginx-conf
+  - zabbix-sql-scripts
+  - zabbix-server-mysql
+  - zabbix-agent2
+  - zabbix-get
+
+percona_packages:
+  - percona-server-server
+  - percona-server-client
+  - percona-xtrabackup-80
+  - percona-toolkit

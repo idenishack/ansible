@@ -1,0 +1,4 @@
+- name: install zabbix-agent
+  dnf:
+    name: zabbix-agent
+    state: latest

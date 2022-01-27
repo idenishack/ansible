@@ -1,0 +1,57 @@
+- name: disable mysql and mariadb module 
+  shell: dnf module disable mysql mariadb -y
+  become: yes
+  tags:
+    - mysql_module     
+- rpm_key:
+    state: present
+    key: https://downloads.percona.com/downloads/RPM-GPG-KEY-percona
+  become: yes
+  tags:
+    - percona-key
+- name: install the percona-release-latest from a remote repo
+  dnf:
+    name: 'https://repo.percona.com/yum/percona-release-latest.noarch.rpm'
+    state: latest
+  become: yes
+  tags:
+    - percona-release-latest 
+- name: enable percona-release ps80 repo
+  shell: percona-release setup ps80 -y
+  become: yes
+  tags:
+    - repo_setup_ps80    
+- name: install percona
+  dnf:
+    name: "{{ percona_packages }}"
+    state: latest  
+  become: yes
+  tags:
+    - percona_packages    
+- name: enable mysqld and start 
+  systemd:
+    name: mysqld
+    state: started
+    enabled: yes
+  become: yes
+  tags:
+    - enable_mysqld        
+- name: print mysql temporary password
+  action: command grep 'temporary password' /var/log/mysqld.log 
+  become: yes
+  tags:
+    - temporary_password  
+- name: Create .my.cnf file 
+  copy:
+    src: roles/zabbix-server/files/.my.cnf
+    dest: /root/
+  become: yes
+  tags:
+    - my_cnf  
+- name: Create create_zabbix_db.sql file 
+  copy:
+    src: roles/zabbix-server/files/create_zabbix_db.sql
+    dest: /root/create_zabbix_db.sql 
+  become: yes
+  tags:
+    - zabbix_db.sql   

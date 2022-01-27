@@ -1,0 +1,12 @@
+- name: download zabbix repo from a file path
+  get_url:
+    url: "https://repo.zabbix.com/zabbix/5.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.4-1+ubuntu20.04_all.deb"
+    dest: /tmp/zabbix-release_5.4-1+ubuntu20.04_all.deb
+- name: Install a zabbix-release_5.4-1+ubuntu20.04_all.deb package 
+  apt:
+    deb: /tmp/zabbix-release_5.4-1+ubuntu20.04_all.deb
+- name: install zabbix-agent2
+  apt:
+    name: zabbix-agent2
+    state: latest    
+    update_cache: yes
